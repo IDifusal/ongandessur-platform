@@ -1,0 +1,29 @@
+{
+  "name": "ongandessur-platform",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "typecheck": "nuxt typecheck",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@nuxtjs/supabase": "^1.5.0",
+    "@nuxtjs/tailwindcss": "^6.14.0",
+    "@tiptap/extension-image": "^3.22.5",
+    "@tiptap/extension-link": "^3.22.5",
+    "@tiptap/extension-placeholder": "^3.22.5",
+    "@tiptap/starter-kit": "^3.22.5",
+    "@tiptap/vue-3": "^3.22.5",
+    "nuxt": "^4.0.0",
+    "vue": "latest",
+    "vue-router": "latest"
+  },
+  "devDependencies": {
+    "@nuxt/eslint": "^1.0.0",
+    "typescript": "~5.7.0"
+  }
+}
