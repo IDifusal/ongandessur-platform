@@ -326,3 +326,126 @@ UPDATE pages SET content = $json$
   ]
 }
 $json$::jsonb WHERE slug = 'contacto';
+
+UPDATE pages SET content = $json$
+{
+  "rows": [
+    {
+      "background": {"image": "", "color": "", "overlay": 0, "position": "center", "repeat": "no-repeat", "size": "cover"},
+      "alignment": {"vertical": "flex-start", "horizontal": "center"},
+      "padding": "lg",
+      "columns": [
+        {
+          "width": "",
+          "widgets": [
+            {"type": "title", "content": "PROYECTOS POR DESARROLLAR", "tag": "h2", "textAlign": "center"}
+          ]
+        }
+      ]
+    },
+    {
+      "background": {"image": "", "color": "", "overlay": 0, "position": "center", "repeat": "no-repeat", "size": "cover"},
+      "alignment": {"vertical": "flex-start", "horizontal": "flex-start"},
+      "padding": "lg",
+      "columns": [
+        {
+          "width": "",
+          "widgets": [
+            {"type": "image", "src": "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=200&h=200&fit=crop", "alt": "Adopta un pueblo", "class": "w-full h-48 object-cover rounded-xl mb-2"},
+            {"type": "title", "content": "ADOPTA UN PUEBLO", "tag": "h3", "textAlign": "center"},
+            {"type": "text", "content": "<p class=\"text-sm\">Con la finalidad de generar desarrollo sostenible, buscamos encontrar socios que estén dispuestos a apoyar proyectos en los pueblos interandinos que permitan elevar la productividad, la innovación para mejorar la calidad de vida de los pobladores.</p>", "textAlign": "center"}
+          ]
+        },
+        {
+          "width": "",
+          "widgets": [
+            {"type": "image", "src": "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=200&h=200&fit=crop", "alt": "Plogging", "class": "w-full h-48 object-cover rounded-xl mb-2"},
+            {"type": "title", "content": "PLOGGING RECOGE, CORRE Y AYUDA AL MEDIO AMBIENTE", "tag": "h3", "textAlign": "center"},
+            {"type": "text", "content": "<p class=\"text-sm\">Salir a correr ya no es sólo preparar las zapatillas y la ropa. Ahora también podremos llevar un par de guantes de látex, una bolsa de basura y muchas ganas de hacer ejercicio pero también de colaborar con el medio ambiente y la limpieza. Así nació el Plogging, una tendencia que arrancó en Suecia y replicaremos en la Ciudad Blanca.</p>", "textAlign": "center"}
+          ]
+        },
+        {
+          "width": "",
+          "widgets": [
+            {"type": "image", "src": "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=200&h=200&fit=crop", "alt": "Marketing de guerrilla", "class": "w-full h-48 object-cover rounded-xl mb-2"},
+            {"type": "title", "content": "MARKETING DE GUERRILLA", "tag": "h3", "textAlign": "center"},
+            {"type": "text", "content": "<p class=\"text-sm\">Herramienta de gran valor que utilizaremos para potencializar la comunicación entre el Estado, la empresa, la academia y la sociedad civil con la finalidad de generar cambios sociales y generar conciencia con el cuidado del medio ambiente.</p>", "textAlign": "center"}
+          ]
+        }
+      ]
+    },
+    {
+      "background": {"image": "", "color": "", "overlay": 0, "position": "center", "repeat": "no-repeat", "size": "cover"},
+      "alignment": {"vertical": "flex-start", "horizontal": "center"},
+      "padding": "lg",
+      "columns": [
+        {
+          "width": "",
+          "widgets": [
+            {"type": "title", "content": "PROYECTOS EN DESARROLLO", "tag": "h2", "textAlign": "center"}
+          ]
+        }
+      ]
+    },
+    {
+      "background": {"image": "", "color": "", "overlay": 0, "position": "center", "repeat": "no-repeat", "size": "cover"},
+      "alignment": {"vertical": "flex-start", "horizontal": "flex-start"},
+      "padding": "lg",
+      "columns": [
+        {
+          "width": "",
+          "widgets": [
+            {"type": "image", "src": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=200&h=200&fit=crop", "alt": "Tableta para tu carpeta", "class": "w-full h-48 object-cover rounded-xl mb-2"},
+            {"type": "title", "content": "TABLETA PARA TU CARPETA", "tag": "h3", "textAlign": "center"},
+            {"type": "text", "content": "<p class=\"text-sm\">La pandemia del COVID-19 ha generado un cambio en las actividades que el hombre desarrolla con normalidad como acudir a su centro de estudios. En nuestro país, muchos estudiantes han tenido que adaptarse a esa nueva normalidad como lo son las clases virtuales. Los estudiantes que no tengan acceso a algún dispositivo electrónico para acceder a sus clases, se verán afectados por no tener los medios necesarios para continuar con vida académica. Promover el acceso a la educación virtual mediante un dispositivo electrónico que permita a estudiantes en situación vulnerable continuar con su formación académica.</p>", "textAlign": "center"}
+          ]
+        }
+      ]
+    },
+    {
+      "background": {"image": "", "color": "", "overlay": 0, "position": "center", "repeat": "no-repeat", "size": "cover"},
+      "alignment": {"vertical": "flex-start", "horizontal": "center"},
+      "padding": "lg",
+      "columns": [
+        {
+          "width": "",
+          "widgets": [
+            {"type": "title", "content": "PROYECTOS REALIZADOS", "tag": "h2", "textAlign": "center"}
+          ]
+        }
+      ]
+    },
+    {
+      "background": {"image": "", "color": "", "overlay": 0, "position": "center", "repeat": "no-repeat", "size": "cover"},
+      "alignment": {"vertical": "flex-start", "horizontal": "flex-start"},
+      "padding": "lg",
+      "columns": [
+        {
+          "width": "",
+          "widgets": [
+            {"type": "image", "src": "https://images.unsplash.com/photo-1523050854058-8df90110c7f1?w=200&h=200&fit=crop", "alt": "Convenio Piecess", "class": "w-full h-48 object-cover rounded-xl mb-2"},
+            {"type": "title", "content": "CONVENIO FUNDACIÓN PIECES - UNIVERSIDAD SAN GALLENT DE SUIZA", "tag": "h3", "textAlign": "center"},
+            {"type": "text", "content": "<p class=\"text-sm\">Se ha concretado la alianza con la Fundación Pieces - Universidad de San Galen de Suiza, para realizar un proyecto de cooperación en la enseñanza de inglés, que se realiza 2 veces al año de manera gratuita a niños del orfanato Chávez de la Rosa, Centro de Familia de Cayma, alumnos de Beca 18, en Arequipa. Este curso lo imparten estudiantes voluntarios de esta prestigiosa Universidad de Suiza, a partir del 2016 al 2018.</p>", "textAlign": "center"}
+          ]
+        },
+        {
+          "width": "",
+          "widgets": [
+            {"type": "image", "src": "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=200&h=200&fit=crop", "alt": "Plan estratégico Mungui", "class": "w-full h-48 object-cover rounded-xl mb-2"},
+            {"type": "title", "content": "PLAN ESTRATÉGICO DE MUNGUI CAPITAL DEL DISTRITO DE PAMPAMARCA", "tag": "h3", "textAlign": "center"},
+            {"type": "text", "content": "<p class=\"text-sm\">Entregado al presidente de la comunidad el Documento que incluye la visión, misión, los objetivos, las metas, las estrategias y actividades para el desarrollo de Mungui capital del distrito de Pampamarca.</p>", "textAlign": "center"}
+          ]
+        },
+        {
+          "width": "",
+          "widgets": [
+            {"type": "image", "src": "https://images.unsplash.com/photo-1576610616656-d3aa88d1f0cf?w=200&h=200&fit=crop", "alt": "Remodelación piscina Mungui", "class": "w-full h-48 object-cover rounded-xl mb-2"},
+            {"type": "title", "content": "REMODELACIÓN DE LA PISCINA DEL PUEBLO DE MUNGUI", "tag": "h3", "textAlign": "center"},
+            {"type": "text", "content": "<p class=\"text-sm\">Se ha desarrollado el proyecto de arquitectura para la remodelación de la piscina de Mungui, que estuvo abandonada 30 años para su puesta en valor con la participación de la Municipalidad Provincial de La Unión, distrital de Pampamarca, la comunidad y la sociedad civil representados por los residentes naturales de este distrito en Arequipa y Lima.</p>", "textAlign": "center"}
+          ]
+        }
+      ]
+    }
+  ]
+}
+$json$::jsonb WHERE slug = 'proyectos';
