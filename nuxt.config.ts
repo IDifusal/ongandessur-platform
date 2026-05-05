@@ -2,7 +2,7 @@ export default defineNuxtConfig({
   ssr: true,
 
   nitro: {
-    preset: 'vercel',
+    preset: 'netlify',
   },
 
   modules: ['@nuxtjs/supabase', '@nuxtjs/tailwindcss'],
