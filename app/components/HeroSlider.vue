@@ -11,6 +11,11 @@ function next() {
   resetTimer()
 }
 
+function prev() {
+  current.value = (current.value - 1 + props.slides.length) % props.slides.length
+  resetTimer()
+}
+
 function goTo(i: number) {
   current.value = i
   resetTimer()
@@ -28,15 +33,25 @@ onUnmounted(() => { if (timer) clearInterval(timer) })
 </script>
 
 <template>
-  <div class="relative h-[300px] md:h-[550px] overflow-hidden">
+  <div class="relative w-full h-[60vh] min-h-[400px] max-h-[700px] overflow-hidden">
     <!-- Backgrounds with Ken Burns -->
     <div v-for="(slide, i) in slides" :key="i" class="absolute inset-0 transition-opacity duration-700" :class="i === current ? 'opacity-100' : 'opacity-0'">
       <div class="absolute inset-0 bg-cover bg-center ken-burns" :style="{ backgroundImage: `url(${slide.image})` }" :class="i % 2 === 0 ? 'ken-zoom-in' : 'ken-zoom-out'" />
       <div class="absolute inset-0 bg-black/40" />
     </div>
 
+    <!-- Prev Arrow -->
+    <button v-if="slides.length > 1" class="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/20 hover:bg-white/40 backdrop-blur-sm text-white text-xl md:text-2xl flex items-center justify-center transition-all border border-white/30" @click="prev" aria-label="Anterior">
+      &#10094;
+    </button>
+
+    <!-- Next Arrow -->
+    <button v-if="slides.length > 1" class="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/20 hover:bg-white/40 backdrop-blur-sm text-white text-xl md:text-2xl flex items-center justify-center transition-all border border-white/30" @click="next" aria-label="Siguiente">
+      &#10095;
+    </button>
+
     <!-- Content -->
-    <div class="relative z-10 h-full flex items-center justify-center text-center px-4 max-w-4xl mx-auto">
+    <div class="relative z-10 h-full flex items-center justify-center text-center px-16 max-w-5xl mx-auto">
       <div v-for="(slide, i) in slides" :key="'c-'+i" class="absolute inset-0 flex items-center justify-center px-4 transition-opacity duration-700" :class="i === current ? 'opacity-100' : 'opacity-0'">
         <div>
           <h1 class="text-3xl md:text-6xl font-bold font-kadwa text-white mb-3" :style="slide.titleStyle || 'text-shadow: 2px 2px 8px rgba(0,0,0,0.6);'">{{ slide.title }}</h1>

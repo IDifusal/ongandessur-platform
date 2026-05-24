@@ -7,6 +7,8 @@ const emit = defineEmits<{
   'update:modelValue': [value: any[]]
 }>()
 
+const { data: templates } = await useFetch('/api/templates', { key: 'pb-templates' })
+
 function defaultRowSettings() {
   return {
     background: { image: '', color: '', overlay: 0, position: 'center', repeat: 'no-repeat', size: 'cover' },
@@ -137,9 +139,9 @@ function setColumns(ri: number, layout: string) {
 
 function addWidget(ri: number, ci: number, type: string) {
   const widget: any = { type }
-  if (type === 'title') { widget.content = 'Nuevo título'; widget.tag = 'h2'; widget.textAlign = 'left' }
+  if (type === 'title') { widget.content = 'Nuevo título'; widget.tag = 'h2'; widget.textAlign = 'left'; widget.fontFamily = ''; widget.fontSize = ''; widget.color = ''; widget.italic = false }
   if (type === 'text') { widget.content = '<p>Escribe aquí...</p>'; widget.textAlign = 'left' }
-  if (type === 'image') widget.src = ''
+  if (type === 'image') { widget.src = ''; widget.link = ''; widget.imageSize = ''; widget.imageHeight = '' }
   if (type === 'button') { widget.text = 'Botón'; widget.link = '#'; widget.textAlign = 'left' }
   if (type === 'hero') {
     widget.slides = [
@@ -147,6 +149,7 @@ function addWidget(ri: number, ci: number, type: string) {
     ]
   }
   if (type === 'divider') { widget.style = 'wave' }
+  if (['services', 'products', 'news'].includes(type)) { widget.templateId = '' }
   rows.value[ri].columns[ci].widgets.push(widget)
 }
 
@@ -183,7 +186,7 @@ function widgetPreview(widget: any) {
 </script>
 
 <template>
-  <div class="page-builder">
+  <div class="page-builder overflow-x-hidden">
     <!-- Empty state -->
     <div v-if="!rows.length" class="border-2 border-dashed border-gray-300 rounded-lg py-16 text-center">
       <p class="text-gray-400 mb-4">No hay filas. Agrega una para empezar a construir.</p>
@@ -319,8 +322,8 @@ function widgetPreview(widget: any) {
       </div>
 
       <!-- Columns -->
-      <div class="flex flex-col md:flex-row p-3 gap-3">
-        <div v-for="(col, ci) in row.columns" :key="ci" class="flex-1 min-h-[120px] border border-dashed border-gray-300 rounded-lg p-3 bg-gray-50/50" :class="{ 'md:w-7/12': col.width === '70', 'md:w-5/12': col.width === '30', 'md:w-8/12': col.width === '80', 'md:w-4/12': col.width === '20' }">
+      <div class="flex flex-col md:flex-row p-3 gap-3 min-w-0">
+         <div v-for="(col, ci) in row.columns" :key="ci" class="flex-1 min-h-[120px] min-w-0 border border-dashed border-gray-300 rounded-lg p-3 bg-gray-50/50" :class="{ 'md:w-7/12': col.width === '70', 'md:w-5/12': col.width === '30', 'md:w-8/12': col.width === '80', 'md:w-4/12': col.width === '20' }">
           <div class="text-xs text-gray-400 mb-2 font-semibold">Columna {{ ci + 1 }}</div>
 
           <!-- Widgets in column -->
@@ -362,29 +365,59 @@ function widgetPreview(widget: any) {
                       <option value="left">Izquierda</option>
                       <option value="center">Centro</option>
                       <option value="right">Derecha</option>
+                      <option value="justify">Justificado</option>
                     </select>
                   </div>
                 </div>
-              </template>
-
-              <template v-if="widget.type === 'text'">
-                <label class="text-xs font-semibold text-gray-600 block mb-1">Contenido (HTML)</label>
-                <textarea v-model="widget.content" class="w-full text-sm border border-gray-300 rounded px-2 py-1 font-mono mb-2" rows="4" />
-                <div>
-                  <label class="text-xs font-semibold text-gray-600 block mb-1">Alineación</label>
-                  <select v-model="widget.textAlign" class="w-full text-sm border border-gray-300 rounded px-2 py-1">
-                    <option value="left">Izquierda</option>
-                    <option value="center">Centro</option>
-                    <option value="right">Derecha</option>
-                  </select>
+                <div class="grid grid-cols-2 gap-2 mb-2">
+                  <div>
+                    <label class="text-xs font-semibold text-gray-600 block mb-1">Fuente</label>
+                    <select v-model="widget.fontFamily" class="w-full text-sm border border-gray-300 rounded px-2 py-1">
+                      <option value="">Predeterminada</option>
+                      <option value="kadwa">Kadwa (serif)</option>
+                      <option value="open-sans">Open Sans</option>
+                      <option value="nanum">Nanum Pen Script</option>
+                      <option value="serif">Serif</option>
+                      <option value="sans">Sans-serif</option>
+                      <option value="mono">Monoespacio</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="text-xs font-semibold text-gray-600 block mb-1">Color</label>
+                    <div class="flex items-center gap-1">
+                      <input type="color" v-model="widget.color" class="w-8 h-8 border border-gray-300 rounded cursor-pointer" />
+                      <input v-model="widget.color" placeholder="#000000" class="flex-1 text-sm border border-gray-300 rounded px-2 py-1" />
+                    </div>
+                  </div>
                 </div>
-              </template>
-
-              <template v-if="widget.type === 'image'">
-                <label class="text-xs font-semibold text-gray-600 block mb-1">Imagen</label>
-                <ImageUploader v-model="widget.src" />
-                <label class="text-xs font-semibold text-gray-600 block mt-2 mb-1">Texto alternativo</label>
-                <input v-model="widget.alt" class="w-full text-sm border border-gray-300 rounded px-2 py-1" />
+                <div class="grid grid-cols-2 gap-2 mb-2">
+                  <div>
+                    <label class="text-xs font-semibold text-gray-600 block mb-1">Tamaño de fuente</label>
+                    <select v-model="widget.fontSize" class="w-full text-sm border border-gray-300 rounded px-2 py-1">
+                      <option value="">Predeterminado</option>
+                      <option value="12px">12px</option>
+                      <option value="14px">14px</option>
+                      <option value="16px">16px</option>
+                      <option value="18px">18px</option>
+                      <option value="20px">20px</option>
+                      <option value="24px">24px</option>
+                      <option value="28px">28px</option>
+                      <option value="32px">32px</option>
+                      <option value="36px">36px</option>
+                      <option value="40px">40px</option>
+                      <option value="48px">48px</option>
+                      <option value="56px">56px</option>
+                      <option value="64px">64px</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="text-xs font-semibold text-gray-600 block mb-1">Estilo</label>
+                    <label class="flex items-center gap-1 mt-1">
+                      <input type="checkbox" v-model="widget.italic" class="rounded" />
+                      <span class="text-xs text-gray-600">Itálica</span>
+                    </label>
+                  </div>
+                </div>
               </template>
 
               <template v-if="widget.type === 'button'">
@@ -411,7 +444,15 @@ function widgetPreview(widget: any) {
                 </div>
               </template>
 
-              <p v-if="['services', 'products', 'news', 'hero', 'divider'].includes(widget.type) && widget.type !== 'hero' && widget.type !== 'divider'" class="text-xs text-gray-500 italic">Este widget muestra contenido dinámico automáticamente.</p>
+              <p v-if="['services', 'products', 'news'].includes(widget.type)" class="text-xs text-gray-500 italic mb-2">Este widget muestra contenido dinámico automáticamente.</p>
+              <template v-if="['services', 'products', 'news'].includes(widget.type)">
+                <label class="text-xs font-semibold text-gray-600 block mb-1">Template (opcional)</label>
+                <select v-model="widget.templateId" class="w-full text-sm border border-gray-300 rounded px-2 py-1">
+                  <option value="">Diseño por defecto</option>
+                  <option v-for="tpl in (templates || [])" :key="tpl.id" :value="tpl.id">{{ tpl.title }}</option>
+                </select>
+                <p class="text-xs text-gray-400 mt-1">Selecciona un template previamente creado para personalizar las tarjetas.</p>
+              </template>
 
               <template v-if="widget.type === 'hero'">
                 <label class="text-xs font-semibold text-gray-600 block mb-1">Slides</label>
@@ -438,7 +479,8 @@ function widgetPreview(widget: any) {
                 <label class="text-xs font-semibold text-gray-600 block mb-1">Estilo</label>
                 <select v-model="widget.style" class="text-sm border border-gray-300 rounded px-2 py-1">
                   <option value="wave">Onda SVG</option>
-                  <option value="line">Línea</option>
+                  <option value="line">Línea horizontal</option>
+                  <option value="vertical">Línea vertical</option>
                   <option value="spacer">Espacio</option>
                 </select>
               </template>

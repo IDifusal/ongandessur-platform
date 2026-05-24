@@ -25,7 +25,8 @@ async function save() {
   error.value = ''
   saving.value = true
   try {
-      const { content, ...rest } = form
+      const payload = JSON.parse(JSON.stringify(form))
+      const { content, ...rest } = payload
       await $fetch('/api/pages', { method: 'POST', body: { ...rest, content } })
     await navigateTo('/dashboard/paginas')
   } catch (e: any) {
@@ -39,7 +40,7 @@ async function save() {
 <template>
   <div class="form-page">
     <h1 class="page-title">Nueva página</h1>
-    <form @submit.prevent="save" class="max-w-3xl">
+    <form @submit.prevent="save" class="w-[calc(100vw-180px)] overflow-x-hidden">
       <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
         <div class="grid grid-cols-2 gap-4">
           <div class="field">

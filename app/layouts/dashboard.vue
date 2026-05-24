@@ -22,6 +22,7 @@ const navItems = [
   { label: 'Noticias',  icon: '📰', to: '/dashboard/noticias' },
   { label: 'Productos', icon: '🛒', to: '/dashboard/productos' },
   { label: 'Servicios', icon: '⚙️', to: '/dashboard/servicios' },
+  { label: 'Templates', icon: '🎨', to: '/dashboard/templates' },
 ]
 
 async function logout() {
@@ -75,7 +76,7 @@ async function logout() {
 }
 
 .cms-sidebar {
-  width: 220px;
+  width: 180px;
   background: #1e1e1e;
   color: #fff;
   display: flex;
@@ -134,7 +135,7 @@ async function logout() {
 
 .cms-main {
   flex: 1;
-  margin-left: 220px;
+  margin-left: 180px;
   display: flex;
   flex-direction: column;
 }
@@ -187,6 +188,7 @@ async function logout() {
 }
 
 .cms-content {
-  padding: 24px;
+  padding: 16px;
+  overflow-x: hidden;
 }
 </style>

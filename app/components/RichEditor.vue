@@ -4,6 +4,9 @@ import StarterKit from '@tiptap/starter-kit'
 import Link from '@tiptap/extension-link'
 import Placeholder from '@tiptap/extension-placeholder'
 import Image from '@tiptap/extension-image'
+import TextAlign from '@tiptap/extension-text-align'
+import { TextStyle } from '@tiptap/extension-text-style'
+import { Color } from '@tiptap/extension-text-style'
 
 const props = defineProps<{
   modelValue: string
@@ -18,11 +21,14 @@ const editor = useEditor({
   content: props.modelValue,
   extensions: [
     StarterKit.configure({
-      heading: { levels: [2, 3] },
+      heading: { levels: [1, 2, 3] },
     }),
     Link.configure({ openOnClick: false }),
     Placeholder.configure({ placeholder: props.placeholder ?? 'Escribe aquí...' }),
     Image,
+    TextAlign.configure({ types: ['heading', 'paragraph'] }),
+    TextStyle,
+    Color,
   ],
   onUpdate: ({ editor }) => {
     emit('update:modelValue', editor.getHTML())
@@ -52,6 +58,13 @@ function addImage() {
   }
 }
 
+function setColor() {
+  const color = window.prompt('Color (hex):', '#1d2327')
+  if (color) {
+    editor.value?.chain().focus().setColor(color).run()
+  }
+}
+
 onBeforeUnmount(() => {
   editor.value?.destroy()
 })
@@ -66,8 +79,20 @@ onBeforeUnmount(() => {
 
       <span class="sep" />
 
+      <button type="button" @click="editor.chain().focus().toggleHeading({ level: 1 }).run()" :class="{ active: editor.isActive('heading', { level: 1 }) }" title="Título grande">H1</button>
       <button type="button" @click="editor.chain().focus().toggleHeading({ level: 2 }).run()" :class="{ active: editor.isActive('heading', { level: 2 }) }" title="Título">H2</button>
       <button type="button" @click="editor.chain().focus().toggleHeading({ level: 3 }).run()" :class="{ active: editor.isActive('heading', { level: 3 }) }" title="Subtítulo">H3</button>
+
+      <span class="sep" />
+
+      <button type="button" @click="editor.chain().focus().setTextAlign('left').run()" :class="{ active: editor.isActive({ textAlign: 'left' }) }" title="Izquierda">⬅</button>
+      <button type="button" @click="editor.chain().focus().setTextAlign('center').run()" :class="{ active: editor.isActive({ textAlign: 'center' }) }" title="Centro">⬌</button>
+      <button type="button" @click="editor.chain().focus().setTextAlign('right').run()" :class="{ active: editor.isActive({ textAlign: 'right' }) }" title="Derecha">➡</button>
+      <button type="button" @click="editor.chain().focus().setTextAlign('justify').run()" :class="{ active: editor.isActive({ textAlign: 'justify' }) }" title="Justificar">◫</button>
+
+      <span class="sep" />
+
+      <button type="button" @click="setColor" title="Color de texto">🎨</button>
 
       <span class="sep" />
 

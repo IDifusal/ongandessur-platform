@@ -8,6 +8,18 @@ if (error.value || !page.value) {
   throw createError({ statusCode: 404, message: 'Página no encontrada' })
 }
 
+if (typeof window !== 'undefined') {
+  console.log('[PageLoader] slug:', slug)
+  console.log('[PageLoader] page.value:', JSON.parse(JSON.stringify(page.value)))
+  console.log('[PageLoader] content.rows:', page.value?.content?.rows)
+  console.log('[PageLoader] content.rows count:', page.value?.content?.rows?.length)
+  if (page.value?.content?.rows) {
+    page.value.content.rows.forEach((row: any, ri: number) => {
+      console.log(`[PageLoader] Row ${ri}:`, { columns: row.columns?.length, widgetsPerCol: row.columns?.map((c: any) => c.widgets?.length) })
+    })
+  }
+}
+
 usePageSeo({
   title: page.value.title,
   description: page.value.description || '',

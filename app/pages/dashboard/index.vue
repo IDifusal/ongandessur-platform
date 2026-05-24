@@ -99,7 +99,7 @@ const recentServicios = computed(() => (servicios.value?.slice(0, 5) ?? []))
 
 <style scoped>
 .dashboard {
-  max-width: 1100px;
+  max-width: none;
 }
 
 .page-title {
