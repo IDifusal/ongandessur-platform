@@ -36,15 +36,22 @@ function openWidgetMenu(ri: number, ci: number) {
 }
 
 const widgetTypes = [
-  { value: 'title',    label: 'Título',     icon: 'T' },
-  { value: 'text',     label: 'Texto',      icon: '¶' },
-  { value: 'image',    label: 'Imagen',     icon: '🖼' },
-  { value: 'button',   label: 'Botón',      icon: '🔘' },
-  { value: 'services', label: 'Servicios',   icon: '⚙️' },
-  { value: 'products', label: 'Productos',   icon: '🛒' },
-  { value: 'news',     label: 'Noticias',    icon: '📰' },
-  { value: 'hero',     label: 'Hero Slider', icon: '🎞' },
-{ value: 'divider',  label: 'Divisor',     icon: '➖' },
+  { value: 'title',                label: 'Título',           icon: 'T' },
+  { value: 'text',                 label: 'Texto',            icon: '¶' },
+  { value: 'image',                label: 'Imagen',           icon: '🖼' },
+  { value: 'button',               label: 'Botón',            icon: '🔘' },
+  { value: 'services',             label: 'Servicios',        icon: '⚙️' },
+  { value: 'products',             label: 'Productos',        icon: '🛒' },
+  { value: 'news',                 label: 'Noticias',         icon: '📰' },
+  { value: 'hero',                 label: 'Hero Slider',      icon: '🎞' },
+  { value: 'divider',              label: 'Divisor',          icon: '➖' },
+  { value: 'hero_banner',           label: 'Hero Banner',      icon: '🏠' },
+  { value: 'institutional_message', label: 'Mensaje Inst.',   icon: '💬' },
+  { value: 'quick_links',          label: 'Accesos rápidos',  icon: '🔗' },
+  { value: 'strategic_axes',       label: 'Ejes estratégicos',icon: '🎯' },
+  { value: 'projects_grid',        label: 'Proyectos',        icon: '📋' },
+  { value: 'stats',                label: 'Indicadores',      icon: '📊' },
+  { value: 'cta_collaborate',      label: 'CTA Colaborar',    icon: '🤝' },
 ]
 
 const columnLayouts = [
@@ -82,15 +89,16 @@ const bgRepeats = [
 
 const presetColors = [
   { value: '', label: 'Ninguno', swatch: 'transparent' },
-  { value: '#1a1a2e', label: 'Azul oscuro', swatch: '#1a1a2e' },
-  { value: '#16213e', label: 'Azul marino', swatch: '#16213e' },
-  { value: '#0f3460', label: 'Azul', swatch: '#0f3460' },
-  { value: '#1fa185', label: 'Verde brand', swatch: '#1fa185' },
-  { value: '#ba9774', label: 'Dorado brand', swatch: '#ba9774' },
+  { value: '#2F6B4F', label: 'Verde brand', swatch: '#2F6B4F' },
+  { value: '#1F4635', label: 'Verde oscuro', swatch: '#1F4635' },
+  { value: '#FEE0AA', label: 'Crema', swatch: '#FEE0AA' },
+  { value: '#FFF8ED', label: 'Fondo cálido', swatch: '#FFF8ED' },
+  { value: '#C96B3C', label: 'Terracota', swatch: '#C96B3C' },
+  { value: '#F4B942', label: 'Dorado', swatch: '#F4B942' },
+  { value: '#ffffff', label: 'Blanco', swatch: '#ffffff' },
   { value: '#f8f9fa', label: 'Gris claro', swatch: '#f8f9fa' },
   { value: '#343a40', label: 'Gris oscuro', swatch: '#343a40' },
   { value: '#000000', label: 'Negro', swatch: '#000000' },
-  { value: '#ffffff', label: 'Blanco', swatch: '#ffffff' },
 ]
 
 const verticalAlignments = [
@@ -150,6 +158,62 @@ function addWidget(ri: number, ci: number, type: string) {
   }
   if (type === 'divider') { widget.style = 'wave' }
   if (['services', 'products', 'news'].includes(type)) { widget.templateId = '' }
+  if (type === 'hero_banner') {
+    widget.heading = 'Desarrollo con esperanza'
+    widget.description = 'ONG Andes Sur trabaja por el desarrollo económico, social y cultural de comunidades y poblaciones vulnerables, promoviendo oportunidades a través de proyectos sociales, formación, investigación, voluntariado y alianzas estratégicas.'
+    widget.tags = ['Educación', 'Formación', 'Proyectos sociales', 'Voluntariado', 'Comunidades']
+    widget.primaryText = 'Conócenos'
+    widget.primaryLink = '/nosotros'
+    widget.secondaryText = 'Ver proyectos'
+    widget.secondaryLink = '/nuestro-trabajo'
+    widget.tertiaryText = 'Colabora con nosotros'
+    widget.tertiaryLink = '/colabora'
+    widget.image = 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=800&h=600&fit=crop'
+    widget.imageAlt = 'Comunidades rurales'
+  }
+  if (type === 'institutional_message') { widget.text = 'Trabajamos junto a jóvenes, estudiantes, profesionales, comunidades, instituciones públicas y privadas para construir oportunidades reales.' }
+  if (type === 'quick_links') {
+    widget.items = [
+      { icon: 'users', title: 'Nosotros', desc: 'Conoce quiénes somos y qué nos mueve', link: '/nosotros' },
+      { icon: 'target', title: 'Nuestro trabajo', desc: 'Proyectos, formación y asesoría', link: '/nuestro-trabajo' },
+      { icon: 'book', title: 'Actualidad', desc: 'Noticias, campañas y convocatorias', link: '/actualidad' },
+      { icon: 'bag', title: 'Tienda virtual', desc: 'Compra solidaria que apoya proyectos', link: '/tienda' },
+    ]
+  }
+  if (type === 'strategic_axes') {
+    widget.title = 'Nuestros ejes estratégicos'
+    widget.items = [
+      { icon: 'lightbulb', title: 'Investigación y organización de eventos', desc: 'Cursos, webinars y espacios de formación para generar conocimiento' },
+      { icon: 'building', title: 'Gestión empresarial y MYPES', desc: 'Fortalecimiento de emprendimientos y pequeñas empresas' },
+      { icon: 'trending', title: 'Economía y gestión pública', desc: 'Desarrollo territorial, economía social y gestión pública' },
+      { icon: 'heart', title: 'Proyectos sociales', desc: 'Iniciativas dirigidas a comunidades y poblaciones vulnerables' },
+    ]
+  }
+  if (type === 'projects_grid') {
+    widget.title = 'Proyectos principales'
+    widget.items = [
+      { title: 'Tableta para tu carpeta', category: 'Educación', image: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=300&fit=crop', link: '/proyectos' },
+      { title: 'Conectados', category: 'Tecnología', image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&h=300&fit=crop', link: '/proyectos' },
+      { title: 'Adopta un pueblo', category: 'Desarrollo comunitario', image: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?w=400&h=300&fit=crop', link: '/proyectos' },
+      { title: 'Moda sostenible', category: 'Emprendimiento', image: 'https://images.unsplash.com/photo-1558769132-cb1aea2f5100?w=400&h=300&fit=crop', link: '/proyectos' },
+    ]
+  }
+  if (type === 'stats') {
+    widget.items = [
+      { number: '+500', label: 'Personas beneficiadas' },
+      { number: '+25', label: 'Proyectos impulsados' },
+      { number: '+30', label: 'Aliados' },
+      { number: '+100', label: 'Voluntarios' },
+      { number: '+40', label: 'Actividades formativas' },
+    ]
+  }
+  if (type === 'cta_collaborate') {
+    widget.title = 'Tu tiempo, conocimiento o apoyo puede convertirse en oportunidades reales para más comunidades'
+    widget.primaryText = 'Quiero colaborar'
+    widget.primaryLink = '/colabora'
+    widget.secondaryText = 'Sé voluntario'
+    widget.secondaryLink = '/colabora'
+  }
   rows.value[ri].columns[ci].widgets.push(widget)
 }
 
@@ -181,6 +245,13 @@ function widgetPreview(widget: any) {
   if (['services', 'products', 'news'].includes(widget.type)) return `(Listado dinámico: ${widget.type})`
   if (widget.type === 'hero') return `(Slider: ${widget.slides?.length || 0} slides)`
   if (widget.type === 'divider') return `(Divisor: ${widget.style || 'wave'})`
+  if (widget.type === 'hero_banner') return `(Hero: "${widget.heading || ''}")`
+  if (widget.type === 'institutional_message') return (widget.text || '').slice(0, 60) + '...'
+  if (widget.type === 'quick_links') return `(Accesos rápidos: ${widget.items?.length || 0} tarjetas)`
+  if (widget.type === 'strategic_axes') return `(Ejes estratégicos: ${widget.items?.length || 0} ejes)`
+  if (widget.type === 'projects_grid') return `(Proyectos: ${widget.items?.length || 0} proyectos)`
+  if (widget.type === 'stats') return `(Indicadores: ${widget.items?.length || 0} cifras)`
+  if (widget.type === 'cta_collaborate') return `(CTA: ${widget.primaryText || 'Colaborar'})`
   return '(widget)'
 }
 </script>
@@ -483,6 +554,143 @@ function widgetPreview(widget: any) {
                   <option value="vertical">Línea vertical</option>
                   <option value="spacer">Espacio</option>
                 </select>
+              </template>
+
+              <template v-if="widget.type === 'hero_banner'">
+                <label class="text-xs font-semibold text-gray-600 block mb-1">Título principal</label>
+                <input v-model="widget.heading" class="w-full text-sm border border-gray-300 rounded px-2 py-1 mb-2" />
+                <label class="text-xs font-semibold text-gray-600 block mb-1">Descripción</label>
+                <textarea v-model="widget.description" rows="3" class="w-full text-sm border border-gray-300 rounded px-2 py-1 mb-2"></textarea>
+                <label class="text-xs font-semibold text-gray-600 block mb-1">Tags (separados por coma)</label>
+                <input
+                  :value="(widget.tags || []).join(', ')"
+                  @input="(e) => widget.tags = e.target.value.split(',').map(t => t.trim()).filter(Boolean)"
+                  class="w-full text-sm border border-gray-300 rounded px-2 py-1 mb-2"
+                  placeholder="Educación, Formación, Voluntariado"
+                />
+                <div class="grid grid-cols-2 gap-2 mb-2">
+                  <div>
+                    <label class="text-xs text-gray-500 block">Botón 1 texto</label>
+                    <input v-model="widget.primaryText" class="w-full text-xs border border-gray-300 rounded px-2 py-1" />
+                  </div>
+                  <div>
+                    <label class="text-xs text-gray-500 block">Botón 1 enlace</label>
+                    <input v-model="widget.primaryLink" class="w-full text-xs border border-gray-300 rounded px-2 py-1" />
+                  </div>
+                  <div>
+                    <label class="text-xs text-gray-500 block">Botón 2 texto</label>
+                    <input v-model="widget.secondaryText" class="w-full text-xs border border-gray-300 rounded px-2 py-1" />
+                  </div>
+                  <div>
+                    <label class="text-xs text-gray-500 block">Botón 2 enlace</label>
+                    <input v-model="widget.secondaryLink" class="w-full text-xs border border-gray-300 rounded px-2 py-1" />
+                  </div>
+                  <div>
+                    <label class="text-xs text-gray-500 block">Botón 3 texto</label>
+                    <input v-model="widget.tertiaryText" class="w-full text-xs border border-gray-300 rounded px-2 py-1" />
+                  </div>
+                  <div>
+                    <label class="text-xs text-gray-500 block">Botón 3 enlace</label>
+                    <input v-model="widget.tertiaryLink" class="w-full text-xs border border-gray-300 rounded px-2 py-1" />
+                  </div>
+                </div>
+                <label class="text-xs font-semibold text-gray-600 block mb-1">Imagen</label>
+                <ImageUploader :model-value="widget.image || ''" @update:model-value="(val) => widget.image = val" class="mb-1" />
+                <label class="text-xs text-gray-500 block">Alt de imagen</label>
+                <input v-model="widget.imageAlt" class="w-full text-xs border border-gray-300 rounded px-2 py-1" />
+              </template>
+
+              <template v-if="widget.type === 'institutional_message'">
+                <label class="text-xs font-semibold text-gray-600 block mb-1">Mensaje</label>
+                <textarea v-model="widget.text" rows="3" class="w-full text-sm border border-gray-300 rounded px-2 py-1"></textarea>
+              </template>
+
+              <template v-if="widget.type === 'quick_links'">
+                <div v-for="(item, idx) in widget.items" :key="idx" class="border border-gray-200 rounded p-2 mb-2 bg-white">
+                  <div class="flex items-center justify-between mb-1">
+                    <span class="text-xs font-semibold text-gray-500">Tarjeta {{ idx + 1 }}</span>
+                    <button type="button" class="text-xs text-red-400" @click="widget.items.splice(idx, 1)">×</button>
+                  </div>
+                  <label class="text-xs text-gray-500 block">Título</label>
+                  <input v-model="item.title" class="w-full text-xs border border-gray-300 rounded px-2 py-1 mb-1" />
+                  <label class="text-xs text-gray-500 block">Descripción</label>
+                  <input v-model="item.desc" class="w-full text-xs border border-gray-300 rounded px-2 py-1 mb-1" />
+                  <label class="text-xs text-gray-500 block">Enlace</label>
+                  <input v-model="item.link" class="w-full text-xs border border-gray-300 rounded px-2 py-1 mb-1" />
+                  <label class="text-xs text-gray-500 block">Ícono (users/target/book/bag/heart)</label>
+                  <input v-model="item.icon" class="w-full text-xs border border-gray-300 rounded px-2 py-1" />
+                </div>
+                <button type="button" class="text-xs text-brand-teal" @click="widget.items.push({ icon: 'users', title: 'Nuevo enlace', desc: '', link: '/' })">+ Añadir tarjeta</button>
+              </template>
+
+              <template v-if="widget.type === 'strategic_axes'">
+                <label class="text-xs font-semibold text-gray-600 block mb-1">Título de sección</label>
+                <input v-model="widget.title" class="w-full text-sm border border-gray-300 rounded px-2 py-1 mb-2" />
+                <div v-for="(item, idx) in widget.items" :key="idx" class="border border-gray-200 rounded p-2 mb-2 bg-white">
+                  <div class="flex items-center justify-between mb-1">
+                    <span class="text-xs font-semibold text-gray-500">Eje {{ idx + 1 }}</span>
+                    <button type="button" class="text-xs text-red-400" @click="widget.items.splice(idx, 1)">×</button>
+                  </div>
+                  <label class="text-xs text-gray-500 block">Título</label>
+                  <input v-model="item.title" class="w-full text-xs border border-gray-300 rounded px-2 py-1 mb-1" />
+                  <label class="text-xs text-gray-500 block">Descripción</label>
+                  <input v-model="item.desc" class="w-full text-xs border border-gray-300 rounded px-2 py-1 mb-1" />
+                  <label class="text-xs text-gray-500 block">Ícono (lightbulb/building/trending/heart/users)</label>
+                  <input v-model="item.icon" class="w-full text-xs border border-gray-300 rounded px-2 py-1" />
+                </div>
+                <button type="button" class="text-xs text-brand-teal" @click="widget.items.push({ icon: 'heart', title: 'Nuevo eje', desc: '' })">+ Añadir eje</button>
+              </template>
+
+              <template v-if="widget.type === 'projects_grid'">
+                <label class="text-xs font-semibold text-gray-600 block mb-1">Título de sección</label>
+                <input v-model="widget.title" class="w-full text-sm border border-gray-300 rounded px-2 py-1 mb-2" />
+                <div v-for="(item, idx) in widget.items" :key="idx" class="border border-gray-200 rounded p-2 mb-2 bg-white">
+                  <div class="flex items-center justify-between mb-1">
+                    <span class="text-xs font-semibold text-gray-500">Proyecto {{ idx + 1 }}</span>
+                    <button type="button" class="text-xs text-red-400" @click="widget.items.splice(idx, 1)">×</button>
+                  </div>
+                  <label class="text-xs text-gray-500 block">Título</label>
+                  <input v-model="item.title" class="w-full text-xs border border-gray-300 rounded px-2 py-1 mb-1" />
+                  <label class="text-xs text-gray-500 block">Categoría</label>
+                  <input v-model="item.category" class="w-full text-xs border border-gray-300 rounded px-2 py-1 mb-1" />
+                  <label class="text-xs text-gray-500 block">Imagen URL</label>
+                  <input v-model="item.image" class="w-full text-xs border border-gray-300 rounded px-2 py-1 mb-1" />
+                  <label class="text-xs text-gray-500 block">Enlace</label>
+                  <input v-model="item.link" class="w-full text-xs border border-gray-300 rounded px-2 py-1" />
+                </div>
+                <button type="button" class="text-xs text-brand-teal" @click="widget.items.push({ title: 'Nuevo proyecto', category: '', image: '', link: '/proyectos' })">+ Añadir proyecto</button>
+              </template>
+
+              <template v-if="widget.type === 'stats'">
+                <div v-for="(item, idx) in widget.items" :key="idx" class="flex gap-2 mb-2 items-center">
+                  <input v-model="item.number" placeholder="+100" class="w-24 text-xs border border-gray-300 rounded px-2 py-1" />
+                  <input v-model="item.label" placeholder="Etiqueta" class="flex-1 text-xs border border-gray-300 rounded px-2 py-1" />
+                  <button type="button" class="text-xs text-red-400" @click="widget.items.splice(idx, 1)">×</button>
+                </div>
+                <button type="button" class="text-xs text-brand-teal" @click="widget.items.push({ number: '+0', label: 'Nueva cifra' })">+ Añadir cifra</button>
+              </template>
+
+              <template v-if="widget.type === 'cta_collaborate'">
+                <label class="text-xs font-semibold text-gray-600 block mb-1">Título</label>
+                <textarea v-model="widget.title" rows="2" class="w-full text-sm border border-gray-300 rounded px-2 py-1 mb-2"></textarea>
+                <div class="grid grid-cols-2 gap-2 mb-2">
+                  <div>
+                    <label class="text-xs text-gray-500 block">Botón principal (texto)</label>
+                    <input v-model="widget.primaryText" class="w-full text-xs border border-gray-300 rounded px-2 py-1" />
+                  </div>
+                  <div>
+                    <label class="text-xs text-gray-500 block">Botón principal (enlace)</label>
+                    <input v-model="widget.primaryLink" class="w-full text-xs border border-gray-300 rounded px-2 py-1" />
+                  </div>
+                  <div>
+                    <label class="text-xs text-gray-500 block">Botón secundario (texto)</label>
+                    <input v-model="widget.secondaryText" class="w-full text-xs border border-gray-300 rounded px-2 py-1" />
+                  </div>
+                  <div>
+                    <label class="text-xs text-gray-500 block">Botón secundario (enlace)</label>
+                    <input v-model="widget.secondaryLink" class="w-full text-xs border border-gray-300 rounded px-2 py-1" />
+                  </div>
+                </div>
               </template>
 
               <button type="button" class="mt-2 text-xs text-gray-500 hover:text-gray-700" @click="editingWidget = null">Cerrar</button>

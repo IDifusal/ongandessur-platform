@@ -21,66 +21,223 @@ $$ language plpgsql;
 -- HOME
 -- ============================================================
 select seed_page('home', 'Inicio', '{
-  "sections": [
+  "rows": [
     {
-      "type": "hero",
-      "slides": [
+      "background": { "image": "", "color": "", "overlay": 0, "position": "center", "repeat": "no-repeat", "size": "cover" },
+      "alignment": { "vertical": "flex-start", "horizontal": "flex-start" },
+      "padding": "none",
+      "fullWidth": true,
+      "columns": [
         {
-          "image": "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=1400&h=600&fit=crop",
-          "title": "BIENVENIDOS A ONG ANDES SUR",
-          "subtitle": "Biodiversidad, desarrollo sostenible y ayuda solidaria en el sur del Perú.",
-          "button": {"text": "Conoce más", "link": "/nosotros"}
-        },
-        {
-          "image": "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1400&h=600&fit=crop",
-          "title": "PROYECTOS DE DESARROLLO",
-          "subtitle": "Comprometidos con el desarrollo del sur, la educación y el medio ambiente.",
-          "button": {"text": "Ver proyectos", "link": "/proyectos"}
-        },
-        {
-          "image": "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=1400&h=600&fit=crop",
-          "title": "SERVICIOS PROFESIONALES",
-          "subtitle": "Asesoría de tesis, gestión empresarial y consultoría pública.",
-          "button": {"text": "Ver servicios", "link": "/servicios"}
+          "width": "",
+          "widgets": [
+            {
+              "type": "hero_banner",
+              "heading": "Desarrollo con esperanza",
+              "description": "ONG Andes Sur trabaja por el desarrollo económico, social y cultural de comunidades y poblaciones vulnerables, promoviendo oportunidades a través de proyectos sociales, formación, investigación, voluntariado y alianzas estratégicas.",
+              "tags": ["Educación", "Formación", "Proyectos sociales", "Voluntariado", "Comunidades"],
+              "primaryText": "Conócenos",
+              "primaryLink": "/nosotros",
+              "secondaryText": "Ver proyectos",
+              "secondaryLink": "/nuestro-trabajo",
+              "tertiaryText": "Colabora con nosotros",
+              "tertiaryLink": "/colabora",
+              "image": "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=800&h=600&fit=crop",
+              "imageAlt": "Comunidades rurales"
+            }
+          ]
         }
       ]
     },
-    { "type": "wave" },
     {
-      "type": "welcome",
-      "class": "-mt-16 md:-mt-8",
-      "title": "BIENVENIDOS A ONG ANDES SUR",
-      "text": "ONG ANDES SUR trabaja constantemente en biodiversidad y ayuda solidaria a niños y jóvenes que necesiten de nosotros. Además promovemos el intercambio horizontal de experiencias de la mano preservando el medio ambiente utilizando las 6R''s que son reducir, reutilizar, reciclar, redistribuir, reparar y reflexionar.",
-      "button": { "text": "Más información", "link": "/nosotros" }
-    },
-    {
-      "type": "cards_grid",
-      "cards": [
-        { "title": "PROYECTOS", "image": "https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=400&h=300&fit=crop", "content": "Nuestros ejes de desarrollo son tres: investigación y desarrollo, gestión empresarial y pública para el desarrollo sostenible y extensión en el ámbito socio-cultural." },
-        { "title": "CLIENTES", "image": "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=400&h=300&fit=crop", "content": "Nuestros servicios van dirigidos tanto a la pequeña y mediana empresa, como también a aquellas personas que desean realizar investigación, ya sea para obtener un grado académico o bien para publicar en revistas científicas." },
-        { "title": "SERVICIOS", "image": "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=400&h=300&fit=crop", "content": "Asesoría de tesis en Ciencias Sociales, Asesoría en Gestión Empresarial, Consultoría en proyectos del sector público." }
+      "background": { "image": "", "color": "#ffffff", "overlay": 0, "position": "center", "repeat": "no-repeat", "size": "cover" },
+      "alignment": { "vertical": "center", "horizontal": "center" },
+      "padding": "lg",
+      "fullWidth": false,
+      "columns": [
+        {
+          "width": "",
+          "widgets": [
+            {
+              "type": "institutional_message",
+              "text": "Trabajamos junto a jóvenes, estudiantes, profesionales, comunidades, instituciones públicas y privadas para construir oportunidades reales."
+            }
+          ]
+        }
       ]
     },
     {
-      "type": "text_image",
-      "image": "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=400&h=300&fit=crop",
-      "imageClass": "-rotate-3",
-      "title": "Comprometidos con el desarrollo del sur",
-      "text": "La pandemia del COVID-19 ha generado un cambio en las actividades que el hombre desarrolla con normalidad como acudir a su centro de estudios. Conoce más de nuestros proyectos.",
-      "button": { "text": "Ver Proyectos", "link": "/proyectos" }
+      "background": { "image": "", "color": "#FFF8ED", "overlay": 0, "position": "center", "repeat": "no-repeat", "size": "cover" },
+      "alignment": { "vertical": "flex-start", "horizontal": "flex-start" },
+      "padding": "lg",
+      "fullWidth": false,
+      "columns": [
+        {
+          "width": "",
+          "widgets": [
+            {
+              "type": "quick_links",
+              "items": [
+                { "icon": "users", "title": "Nosotros", "desc": "Conoce quiénes somos y qué nos mueve", "link": "/nosotros" },
+                { "icon": "target", "title": "Nuestro trabajo", "desc": "Proyectos, formación y asesoría", "link": "/nuestro-trabajo" },
+                { "icon": "book", "title": "Actualidad", "desc": "Noticias, campañas y convocatorias", "link": "/actualidad" },
+                { "icon": "bag", "title": "Tienda virtual", "desc": "Compra solidaria que apoya proyectos", "link": "/tienda" }
+              ]
+            }
+          ]
+        }
+      ]
     },
-    { "type": "dynamic_services" },
-    { "type": "dynamic_products" },
-    { "type": "dynamic_news" },
     {
-      "type": "cta_banner",
-      "text": "Pronto nuestros artículos de opinión"
+      "background": { "image": "", "color": "#ffffff", "overlay": 0, "position": "center", "repeat": "no-repeat", "size": "cover" },
+      "alignment": { "vertical": "center", "horizontal": "flex-start" },
+      "padding": "xl",
+      "fullWidth": false,
+      "columns": [
+        {
+          "width": "70",
+          "widgets": [
+            {
+              "type": "title",
+              "content": "¿Qué es ONG Andes Sur?",
+              "tag": "h2",
+              "textAlign": "left",
+              "fontFamily": "kadwa",
+              "fontSize": "32px",
+              "color": "#1F4635",
+              "italic": false
+            },
+            {
+              "type": "text",
+              "content": "<p>ONG Andes Sur es una organización orientada a promover el desarrollo económico, social y cultural mediante proyectos sociales, investigación, formación, asesoría, voluntariado y trabajo articulado con instituciones públicas y privadas.</p><p><br/>Su labor se dirige especialmente a poblaciones vulnerables, comunidades rurales, estudiantes, jóvenes, emprendedores, productores y grupos que requieren apoyo para fortalecer sus capacidades y mejorar sus oportunidades.</p>",
+              "textAlign": "left"
+            },
+            {
+              "type": "button",
+              "text": "Leer más",
+              "link": "/nosotros",
+              "textAlign": "left",
+              "style": "primary"
+            }
+          ]
+        },
+        {
+          "width": "30",
+          "widgets": [
+            {
+              "type": "image",
+              "src": "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=700&h=500&fit=crop",
+              "alt": "Jóvenes voluntarios",
+              "imageSize": "cover",
+              "imageHeight": "380px"
+            }
+          ]
+        }
+      ]
     },
     {
-      "type": "cta_image",
-      "title": "🤓 Necesitas ayuda con tu tesis?",
-      "image": "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=300&h=400&fit=crop",
-      "button": { "text": "Nos comunicamos contigo", "link": "/contacto" }
+      "background": { "image": "", "color": "#FFF8ED", "overlay": 0, "position": "center", "repeat": "no-repeat", "size": "cover" },
+      "alignment": { "vertical": "flex-start", "horizontal": "flex-start" },
+      "padding": "lg",
+      "fullWidth": false,
+      "columns": [
+        {
+          "width": "",
+          "widgets": [
+            {
+              "type": "strategic_axes",
+              "title": "Nuestros ejes estratégicos",
+              "items": [
+                { "icon": "lightbulb", "title": "Investigación y organización de eventos", "desc": "Cursos, webinars y espacios de formación para generar conocimiento" },
+                { "icon": "building", "title": "Gestión empresarial y MYPES", "desc": "Fortalecimiento de emprendimientos y pequeñas empresas" },
+                { "icon": "trending", "title": "Economía y gestión pública", "desc": "Desarrollo territorial, economía social y gestión pública" },
+                { "icon": "heart", "title": "Proyectos sociales", "desc": "Iniciativas dirigidas a comunidades y poblaciones vulnerables" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "background": { "image": "", "color": "#ffffff", "overlay": 0, "position": "center", "repeat": "no-repeat", "size": "cover" },
+      "alignment": { "vertical": "flex-start", "horizontal": "flex-start" },
+      "padding": "lg",
+      "fullWidth": false,
+      "columns": [
+        {
+          "width": "",
+          "widgets": [
+            {
+              "type": "projects_grid",
+              "title": "Proyectos principales",
+              "items": [
+                { "title": "Tableta para tu carpeta", "category": "Educación", "image": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=300&fit=crop", "link": "/proyectos" },
+                { "title": "Conectados", "category": "Tecnología", "image": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&h=300&fit=crop", "link": "/proyectos" },
+                { "title": "Adopta un pueblo", "category": "Desarrollo comunitario", "image": "https://images.unsplash.com/photo-1593113598332-cd288d649433?w=400&h=300&fit=crop", "link": "/proyectos" },
+                { "title": "Moda sostenible", "category": "Emprendimiento", "image": "https://images.unsplash.com/photo-1558769132-cb1aea2f5100?w=400&h=300&fit=crop", "link": "/proyectos" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "background": { "image": "", "color": "#2F6B4F", "overlay": 0, "position": "center", "repeat": "no-repeat", "size": "cover" },
+      "alignment": { "vertical": "center", "horizontal": "center" },
+      "padding": "lg",
+      "fullWidth": false,
+      "columns": [
+        {
+          "width": "",
+          "widgets": [
+            {
+              "type": "stats",
+              "items": [
+                { "number": "+500", "label": "Personas beneficiadas" },
+                { "number": "+25", "label": "Proyectos impulsados" },
+                { "number": "+30", "label": "Aliados" },
+                { "number": "+100", "label": "Voluntarios" },
+                { "number": "+40", "label": "Actividades formativas" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "background": { "image": "", "color": "#ffffff", "overlay": 0, "position": "center", "repeat": "no-repeat", "size": "cover" },
+      "alignment": { "vertical": "flex-start", "horizontal": "flex-start" },
+      "padding": "lg",
+      "fullWidth": false,
+      "columns": [
+        {
+          "width": "",
+          "widgets": [
+            { "type": "news", "templateId": "" }
+          ]
+        }
+      ]
+    },
+    {
+      "background": { "image": "", "color": "#FEE0AA", "overlay": 0, "position": "center", "repeat": "no-repeat", "size": "cover" },
+      "alignment": { "vertical": "center", "horizontal": "center" },
+      "padding": "xl",
+      "fullWidth": false,
+      "columns": [
+        {
+          "width": "",
+          "widgets": [
+            {
+              "type": "cta_collaborate",
+              "title": "Tu tiempo, conocimiento o apoyo puede convertirse en oportunidades reales para más comunidades",
+              "primaryText": "Quiero colaborar",
+              "primaryLink": "/colabora",
+              "secondaryText": "Sé voluntario",
+              "secondaryLink": "/colabora"
+            }
+          ]
+        }
+      ]
     }
   ]
 }');
