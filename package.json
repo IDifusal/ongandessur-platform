@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.0.0",
+    "@vue/language-core": "^3.3.3",
     "typescript": "~5.7.0"
   }
 }
