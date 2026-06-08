@@ -3,23 +3,11 @@ const props = defineProps<{
   rows: any[]
 }>()
 
+// Mantenemos la variable pero dejamos el bloque vacío para que no ensucie tu consola
 const isClient = typeof window !== 'undefined'
 
 if (isClient) {
-  console.log('[PageWidgets] Received rows:', props.rows?.length)
-  if (props.rows) {
-    props.rows.forEach((row: any, ri: number) => {
-      console.log(`[PageWidgets] Row ${ri}:`, {
-        columns: row.columns?.length,
-        fullWidth: row.fullWidth,
-        padding: row.padding,
-        bg: !!row.background?.image || !!row.background?.color,
-      })
-      row.columns?.forEach((col: any, ci: number) => {
-        console.log(`[PageWidgets]   Col ${ci}: widgets=${col.widgets?.length}`, col.widgets?.map((w: any) => `${w.type}:"${String(w.content || w.text || '').slice(0, 30)}"`))
-      })
-    })
-  }
+  // Los console.log de depuración fueron eliminados de aquí
 }
 
 function rowStyle(row: any) {
@@ -66,8 +54,14 @@ function alignmentClass(row: any) {
 const paddingMap: Record<string, string> = { none: 'py-0', sm: 'py-3', md: 'py-6', lg: 'py-12', xl: 'py-20' }
 
 function textAlignClass(widget: any) {
-  const a = widget.textAlign || 'left'
-  return { left: 'text-left', center: 'text-center', right: 'text-right', justify: 'text-justify' }[a] || 'text-left'
+  const a = (widget.textAlign || 'left') as string
+  const alignMap: Record<string, string> = {
+    left: 'text-left',
+    center: 'text-center',
+    right: 'text-right',
+    justify: 'text-justify',
+  }
+  return alignMap[a] || 'text-left'
 }
 
 const fontFamilyMap: Record<string, string> = {
@@ -82,6 +76,39 @@ const fontFamilyMap: Record<string, string> = {
 function paddingClass(row: any) {
   const p: string = row.padding || 'md'
   return paddingMap[p] || 'py-6'
+}
+
+function sanitizeHtml(value: string) {
+  return String(value || '')
+    .replace(/<img\b[^>]*src=(['"])(?:\s*\1|[^'">]+)?[^>]*>/gi, '')
+    .replace(/<img\b[^>]*src=(['"])undefined\1[^>]*>/gi, '')
+    .replace(/<img\b[^>]*src=(['"])\s*\1[^>]*>/gi, '')
+}
+
+function getImageStyle(widget: any) {
+  const height = widget.imageHeight || '300px'
+  const fit = String(widget.imageFit || widget.imageSize || 'cover')
+
+  const base: Record<string, string> = {
+    width: '100%',
+    height,
+  }
+
+  if (fit === 'contain') {
+    base.objectFit = 'contain'
+    base.objectPosition = 'center'
+    base.backgroundColor = '#f8fafc'
+    return base
+  }
+
+  if (fit === 'fill') {
+    base.objectFit = 'fill'
+    return base
+  }
+
+  base.objectFit = 'cover'
+  base.objectPosition = 'center'
+  return base
 }
 </script>
 
@@ -115,7 +142,6 @@ function paddingClass(row: any) {
             }"
           >
             <div v-for="(widget, wi) in col.widgets" :key="wi" class="mb-4">
-              <!-- Title -->
               <component
                 v-if="widget.type === 'title'"
                 :is="widget.tag || 'h2'"
@@ -127,34 +153,36 @@ function paddingClass(row: any) {
                   fontFamily: widget.fontFamily || '',
                 }"
                 class="font-bold font-kadwa text-gray-800"
-                v-html="widget.content"
+                v-html="sanitizeHtml(widget.content)"
               />
 
-              <!-- Text -->
-              <div v-if="widget.type === 'text'" class="text-gray-600 leading-relaxed" :class="textAlignClass(widget)" :style="{ textAlign: widget.textAlign === 'justify' ? 'justify' : '' }" v-html="widget.content" />
+              <div
+                v-if="widget.type === 'text'"
+                class="texto-enriquecido text-gray-600 leading-relaxed"
+                :class="textAlignClass(widget)"
+                :style="{ textAlign: widget.textAlign === 'justify' ? 'justify' : undefined }"
+                v-html="sanitizeHtml(widget.content)"
+              />
 
-              <!-- Image -->
-              <a v-if="widget.type === 'image' && widget.link" :href="widget.link" target="_blank" rel="noopener">
-                <img :src="widget.src" :alt="widget.alt || ''" class="rounded-lg" :class="widget.imageClass || 'max-w-full h-auto'" :style="widget.imageSize === 'cover' ? 'width:100%;height:' + (widget.imageHeight || '300px') + ';object-fit:cover;' : (widget.imageSize === 'contain' ? 'object-fit:contain;max-height:' + (widget.imageHeight || '400px') + ';' : '')" />
+              <a v-if="widget.type === 'image' && widget.link" :href="widget.link" target="_blank" rel="noopener" class="block w-full">
+                <img :src="widget.src" :alt="widget.alt || ''" class="rounded-lg w-full" :class="widget.imageClass || 'max-w-full h-auto'" :style="getImageStyle(widget)" />
               </a>
-              <img v-else-if="widget.type === 'image'" :src="widget.src" :alt="widget.alt || ''" class="rounded-lg" :class="widget.imageClass || 'max-w-full h-auto'" :style="widget.imageSize === 'cover' ? 'width:100%;height:' + (widget.imageHeight || '300px') + ';object-fit:cover;' : (widget.imageSize === 'contain' ? 'object-fit:contain;max-height:' + (widget.imageHeight || '400px') + ';' : '')" />
+              <img v-else-if="widget.type === 'image'" :src="widget.src" :alt="widget.alt || ''" class="rounded-lg w-full" :class="widget.imageClass || 'max-w-full h-auto'" :style="getImageStyle(widget)" />
 
-              <!-- Button -->
               <div v-if="widget.type === 'button'" :class="textAlignClass(widget)">
                 <NuxtLink :to="widget.link || '#'" class="inline-block px-6 py-3 font-semibold rounded-lg transition-colors no-underline" :class="widget.style === 'secondary' ? 'bg-brand-gold text-white hover:bg-amber-700' : 'bg-brand-teal text-white hover:bg-teal-700'">
                   {{ widget.text || 'Botón' }}
                 </NuxtLink>
               </div>
 
-              <!-- Dynamic widgets -->
+              <Flashcard v-if="widget.type === 'flashcard'" :widget="widget" />
+
               <DynamicServices v-if="widget.type === 'services'" :template-id="widget.templateId" />
               <DynamicProducts v-if="widget.type === 'products'" :template-id="widget.templateId" />
               <DynamicNews v-if="widget.type === 'news'" :template-id="widget.templateId" />
 
-              <!-- Hero Slider -->
               <HeroSlider v-if="widget.type === 'hero'" :slides="widget.slides || []" />
 
-              <!-- Divider -->
               <svg v-if="widget.type === 'divider' && widget.style === 'wave'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" class="-my-4">
                 <path fill="#1fa185" fill-opacity="1" d="M0,256L48,240C96,224,192,192,288,176C384,160,480,160,576,186.7C672,213,768,267,864,261.3C960,256,1056,192,1152,160C1248,128,1344,128,1392,128L1440,128L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z" />
               </svg>
@@ -164,12 +192,10 @@ function paddingClass(row: any) {
                 <div class="w-px h-16 md:h-24 bg-gray-300"></div>
               </div>
 
-              <!-- Hero Banner -->
               <div v-if="widget.type === 'hero_banner'" class="-mx-3 -my-4">
                 <div style="background: linear-gradient(135deg, #FFF8ED 0%, #FEE0AA 100%);">
                   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
                     <div class="grid lg:grid-cols-2 gap-12 items-center">
-                      <!-- Left: text content -->
                       <div>
                         <h1 class="text-4xl lg:text-5xl font-bold font-kadwa leading-tight mb-6" style="color: #1F4635;">
                           {{ widget.heading || 'Desarrollo con esperanza' }}
@@ -177,7 +203,6 @@ function paddingClass(row: any) {
                         <p class="text-lg leading-relaxed mb-8" style="color: #667085;">
                           {{ widget.description }}
                         </p>
-                        <!-- Tags -->
                         <div v-if="widget.tags && widget.tags.length" class="flex flex-wrap gap-2 mb-8">
                           <span
                             v-for="tag in widget.tags"
@@ -186,7 +211,6 @@ function paddingClass(row: any) {
                             style="background-color: #FEE0AA; color: #33251A;"
                           >{{ tag }}</span>
                         </div>
-                        <!-- Buttons -->
                         <div class="flex flex-wrap gap-4">
                           <NuxtLink v-if="widget.primaryText" :to="widget.primaryLink || '#'" class="px-6 py-3 rounded-lg font-semibold text-white inline-flex items-center gap-2 no-underline transition-colors" style="background-color: #2F6B4F;" onmouseover="this.style.backgroundColor='#1F4635'" onmouseout="this.style.backgroundColor='#2F6B4F'">
                             {{ widget.primaryText }}
@@ -200,7 +224,6 @@ function paddingClass(row: any) {
                           </NuxtLink>
                         </div>
                       </div>
-                      <!-- Right: image -->
                       <div v-if="widget.image" class="relative">
                         <img
                           :src="widget.image"
@@ -214,12 +237,10 @@ function paddingClass(row: any) {
                 </div>
               </div>
 
-              <!-- Institutional Message -->
               <div v-if="widget.type === 'institutional_message'" class="py-8 text-center">
                 <p class="text-xl text-brand-brown-text leading-relaxed max-w-3xl mx-auto">{{ widget.text }}</p>
               </div>
 
-              <!-- Quick Links -->
               <div v-if="widget.type === 'quick_links'" class="py-4">
                 <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                   <NuxtLink
@@ -245,7 +266,6 @@ function paddingClass(row: any) {
                 </div>
               </div>
 
-              <!-- Strategic Axes -->
               <div v-if="widget.type === 'strategic_axes'" class="py-4">
                 <h2 v-if="widget.title" class="text-3xl font-bold text-brand-green-dark mb-12 text-center font-kadwa">{{ widget.title }}</h2>
                 <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -263,7 +283,6 @@ function paddingClass(row: any) {
                 </div>
               </div>
 
-              <!-- Projects Grid -->
               <div v-if="widget.type === 'projects_grid'" class="py-4">
                 <h2 v-if="widget.title" class="text-3xl font-bold text-brand-green-dark mb-12 text-center font-kadwa">{{ widget.title }}</h2>
                 <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -292,7 +311,6 @@ function paddingClass(row: any) {
                 </div>
               </div>
 
-              <!-- Stats -->
               <div v-if="widget.type === 'stats'" class="py-4">
                 <div class="grid grid-cols-2 md:grid-cols-5 gap-8 text-center">
                   <div v-for="item in (widget.items || [])" :key="item.label">
@@ -302,7 +320,6 @@ function paddingClass(row: any) {
                 </div>
               </div>
 
-              <!-- CTA Collaborate -->
               <div v-if="widget.type === 'cta_collaborate'" class="py-4 text-center max-w-4xl mx-auto">
                 <h2 v-if="widget.title" class="text-3xl font-bold text-brand-green-dark mb-8 font-kadwa">{{ widget.title }}</h2>
                 <div class="flex flex-wrap justify-center gap-4">
@@ -321,26 +338,35 @@ function paddingClass(row: any) {
       </div>
     </div>
 
-    <!-- DEBUG PANEL -->
-    <div v-if="isClient" class="fixed bottom-0 right-0 z-50 bg-gray-900 text-green-400 text-xs font-mono p-3 m-2 rounded-lg max-w-md max-h-96 overflow-auto opacity-90" style="box-shadow: 0 0 20px rgba(0,0,0,0.5)">
-      <div class="flex justify-between items-center mb-2 border-b border-gray-700 pb-1">
-        <strong class="text-white">DEBUG PageWidgets</strong>
-        <button class="text-gray-400 hover:text-white text-lg leading-none" onclick="this.parentElement.parentElement.remove()">x</button>
-      </div>
-      <div><span class="text-yellow-400">rows:</span> {{ rows?.length || 0 }}</div>
-      <div v-if="!rows?.length" class="text-red-400 mt-1">EMPTY ROWS - nothing to render!</div>
-      <template v-for="(row, ri) in (rows || [])" :key="'d-'+ri">
-        <div class="mt-1 border-t border-gray-700 pt-1">
-          <span class="text-cyan-400">Row {{ ri }}:</span>
-          cols={{ row.columns?.length }},
-          fw={{ row.fullWidth }},
-          pd={{ row.padding }}
-        </div>
-        <div v-for="(col, ci) in (row.columns || [])" :key="'dc-'+ci" class="ml-2">
-          <span class="text-purple-400">Col {{ ci }}:</span> {{ col.widgets?.length || 0 }} widgets
-          [<span v-for="(w, wi) in (col.widgets || [])" :key="'dw-'+wi">{{ w.type }}{{ wi < col.widgets.length - 1 ? ', ' : '' }}</span>]
-        </div>
-      </template>
     </div>
-  </div>
 </template>
+
+<style scoped>
+.texto-enriquecido :deep(ul) {
+  list-style: disc outside !important;
+  list-style-type: disc !important;
+  list-style-position: outside !important;
+  display: block !important;
+  padding-left: 1.25rem !important;
+  margin: 0 0 1rem 1.25rem !important;
+}
+
+.texto-enriquecido :deep(ol) {
+  list-style: decimal outside !important;
+  list-style-type: decimal !important;
+  list-style-position: outside !important;
+  display: block !important;
+  padding-left: 1.25rem !important;
+  margin: 0 0 1rem 1.25rem !important;
+}
+
+.texto-enriquecido :deep(li) {
+  display: list-item !important;
+  margin-bottom: 0.25rem !important;
+}
+
+.texto-enriquecido :deep(ul li::marker),
+.texto-enriquecido :deep(ol li::marker) {
+  color: inherit !important;
+}
+</style>

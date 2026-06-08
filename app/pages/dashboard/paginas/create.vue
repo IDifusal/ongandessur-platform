@@ -25,9 +25,22 @@ async function save() {
   error.value = ''
   saving.value = true
   try {
-      const payload = JSON.parse(JSON.stringify(form))
-      const { content, ...rest } = payload
-      await $fetch('/api/pages', { method: 'POST', body: { ...rest, content } })
+    // 1. Obtenemos las páginas actuales para ver cuál es el último 'order'
+    const allPages = await $fetch('/api/pages') as any[]
+    
+    // 2. Calculamos el siguiente número (el más alto actual + 1)
+    const maxOrder = allPages.length > 0 
+      ? Math.max(...allPages.map(p => p.order || 0)) 
+      : -1
+      
+    // 3. Preparamos los datos
+    const payload = JSON.parse(JSON.stringify(form))
+    payload.order = maxOrder + 1 // <--- Le asignamos el último lugar
+    
+    const { content, ...rest } = payload
+    
+    // 4. Guardamos en la base de datos
+    await $fetch('/api/pages', { method: 'POST', body: { ...rest, content } })
     await navigateTo('/dashboard/paginas')
   } catch (e: any) {
     error.value = e.data?.message || e.message || 'Error al guardar'

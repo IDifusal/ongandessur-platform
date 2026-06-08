@@ -4,6 +4,26 @@ const route = useRoute()
 
 const isLoginPage = computed(() => route.path === '/dashboard/login')
 
+// 1. Configuramos la cookie para TODA la aplicación (path: '/') y que dure 1 año
+const themeCookie = useCookie('dashboard-theme', { 
+  default: () => 'light',
+  path: '/',
+  maxAge: 31536000
+})
+
+const isDarkMode = computed({
+  get: () => themeCookie.value === 'dark',
+  set: (val) => { themeCookie.value = val ? 'dark' : 'light' }
+})
+
+// 2. Inyectamos el color de fondo directamente al <body> del HTML nativo
+// Esto pinta el fondo oscuro desde el milisegundo cero, antes de que Vue siquiera arranque.
+useHead({
+  bodyAttrs: {
+    style: computed(() => isDarkMode.value ? 'background-color: #020617; margin: 0;' : 'background-color: #f1f5f9; margin: 0;')
+  }
+})
+
 onMounted(() => {
   if (!user.value && !isLoginPage.value) {
     navigateTo('/dashboard/login')
@@ -32,7 +52,7 @@ async function logout() {
 </script>
 
 <template>
-  <div class="cms-wrapper">
+  <div class="cms-wrapper" :class="{ 'theme-dark': isDarkMode }">
     <aside v-if="!isLoginPage" class="cms-sidebar">
       <div class="sidebar-header">
         <NuxtLink to="/dashboard" class="sidebar-home">Dashboard</NuxtLink>
@@ -55,6 +75,12 @@ async function logout() {
       <header v-if="!isLoginPage" class="cms-topbar">
         <span class="topbar-title">{{ route.meta.title || 'Dashboard' }}</span>
         <div class="topbar-right">
+          
+          <button type="button" @click="isDarkMode = !isDarkMode" class="btn-theme-toggle">
+            <span class="icon">{{ isDarkMode ? '☀️' : '🌙' }}</span>
+            <span class="hidden sm:inline">{{ isDarkMode ? 'Modo Claro' : 'Modo Oscuro' }}</span>
+          </button>
+          
           <span class="topbar-user">{{ user?.email }}</span>
           <button class="btn-logout" @click="logout">Cerrar sesión</button>
         </div>
@@ -68,17 +94,49 @@ async function logout() {
 </template>
 
 <style scoped>
+/* SISTEMA DE VARIABLES GLOBALES DEL DASHBOARD */
 .cms-wrapper {
+  --bg-main: #f1f5f9;
+  --bg-sidebar: #1e293b;
+  --border-sidebar: #334155;
+  --text-sidebar: #94a3b8;
+  --text-sidebar-hover: #ffffff;
+  --bg-sidebar-hover: #334155;
+  --bg-sidebar-active: #3b82f6;
+
+  --bg-topbar: #ffffff;
+  --border-topbar: #e2e8f0;
+  --text-title: #1e293b;
+  --text-user: #64748b;
+
   display: flex;
   min-height: 100vh;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: #f0f0f1;
+  background: var(--bg-main);
+  /* Se eliminó la transición de fondo para evitar animaciones al recargar la página */
+}
+
+.cms-wrapper.theme-dark {
+  --bg-main: #020617; 
+  --bg-sidebar: #0f172a;
+  --border-sidebar: #1e293b;
+  --text-sidebar: #94a3b8;
+  --text-sidebar-hover: #ffffff;
+  --bg-sidebar-hover: #1e293b;
+  --bg-sidebar-active: #3b82f6;
+
+  --bg-topbar: #0f172a;
+  --border-topbar: #1e293b;
+  --text-title: #f8fafc;
+  --text-user: #94a3b8;
+  
+  color-scheme: dark;
 }
 
 .cms-sidebar {
   width: 180px;
-  background: #1e1e1e;
-  color: #fff;
+  background: var(--bg-sidebar);
+  color: var(--text-sidebar-hover);
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -86,17 +144,18 @@ async function logout() {
   left: 0;
   bottom: 0;
   z-index: 100;
+  border-right: 1px solid var(--border-sidebar);
 }
 
 .sidebar-header {
   padding: 20px;
   font-size: 20px;
   font-weight: 700;
-  border-bottom: 1px solid #2c2c2c;
+  border-bottom: 1px solid var(--border-sidebar);
 }
 
 .sidebar-home {
-  color: #fff;
+  color: var(--text-sidebar-hover);
   text-decoration: none;
 }
 
@@ -111,19 +170,19 @@ async function logout() {
   align-items: center;
   gap: 10px;
   padding: 12px 20px;
-  color: #b4b4b4;
+  color: var(--text-sidebar);
   text-decoration: none;
   font-size: 14px;
-  transition: background 0.15s;
+  transition: all 0.2s;
 }
 
 .nav-item:hover {
-  background: #2c2c2c;
-  color: #fff;
+  background: var(--bg-sidebar-hover);
+  color: var(--text-sidebar-hover);
 }
 
 .nav-item.active {
-  background: #2271b1;
+  background: var(--bg-sidebar-active);
   color: #fff;
 }
 
@@ -149,8 +208,8 @@ async function logout() {
   align-items: center;
   justify-content: space-between;
   padding: 12px 24px;
-  background: #fff;
-  border-bottom: 1px solid #dcdcde;
+  background: var(--bg-topbar);
+  border-bottom: 1px solid var(--border-topbar);
   position: sticky;
   top: 0;
   z-index: 50;
@@ -159,7 +218,7 @@ async function logout() {
 .topbar-title {
   font-size: 16px;
   font-weight: 600;
-  color: #1d2327;
+  color: var(--text-title);
 }
 
 .topbar-right {
@@ -170,7 +229,26 @@ async function logout() {
 
 .topbar-user {
   font-size: 13px;
-  color: #646970;
+  color: var(--text-user);
+}
+
+.btn-theme-toggle {
+  background: transparent;
+  border: 1px solid var(--border-topbar);
+  color: var(--text-title);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.btn-theme-toggle:hover {
+  background: var(--bg-main);
 }
 
 .btn-logout {
@@ -181,6 +259,7 @@ async function logout() {
   border-radius: 4px;
   font-size: 13px;
   cursor: pointer;
+  transition: background 0.2s;
 }
 
 .btn-logout:hover {
@@ -188,7 +267,7 @@ async function logout() {
 }
 
 .cms-content {
-  padding: 16px;
+  padding: 24px;
   overflow-x: hidden;
 }
 </style>
