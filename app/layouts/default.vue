@@ -1,17 +1,29 @@
 <script setup lang="ts">
 const mobileOpen = ref(false)
 
-const { data: pages } = await useFetch('/api/pages', { key: 'layout-pages' })
+// Obtenemos las páginas normalmente, sin romper el ciclo de hidratación de Nuxt
+const { data: pages } = await useFetch('/api/pages', { 
+  key: 'layout-pages'
+})
 
 const navPages = computed(() => {
   if (!pages.value) return []
-  return pages.value.filter((p: any) => p.slug !== 'home' && p.slug !== 'dashboard')
+  
+  // 1. Filtramos las páginas estáticas (home y dashboard)
+  const filtered = pages.value.filter((p: any) => p.slug !== 'home' && p.slug !== 'dashboard')
+  
+  // 2. Clonamos el array con [...filtered] antes de hacer el sort para evitar el "Hydration Mismatch"
+  // y aplicamos el ordenamiento basado en tu nueva columna 'order'
+  return [...filtered].sort((a: any, b: any) => {
+    const orderA = a.order !== undefined && a.order !== null ? a.order : 999
+    const orderB = b.order !== undefined && b.order !== null ? b.order : 999
+    return orderA - orderB
+  })
 })
 </script>
 
 <template>
   <div class="min-h-screen flex flex-col font-open-sans">
-    <!-- Header -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-20">
@@ -66,12 +78,10 @@ const navPages = computed(() => {
       </div>
     </header>
 
-    <!-- Page content -->
     <main class="flex-1">
       <slot />
     </main>
 
-    <!-- Footer -->
     <footer class="bg-brand-green-dark text-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
